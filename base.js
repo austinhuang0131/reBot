@@ -85,7 +85,7 @@ let modRole = message.guild.roles.find('name', 'moddi');
       kickMember.kick();
     }
 
-    //Ban members.
+  //Ban members.
     if (command === `ban`) {
       let modRole = message.guild.roles.find("name", "moddi", "Mod");
       if (!message.member.roles.has(modRole.id)) {
@@ -103,6 +103,14 @@ let modRole = message.guild.roles.find('name', 'moddi');
       }
       banMember.ban();
     }
+
+ //VERY simple roleme, temporary solution!
+ let role = message.guild.roles.find("name", "Updates");
+let member = message.member;
+member.addRole(role) 
+
+member.removeRole(role)
+
 
 //The one and powerful eval command.
     if (command === 'eval') {
