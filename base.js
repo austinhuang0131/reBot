@@ -70,7 +70,7 @@ let modRole = message.guild.roles.find('name', 'moddi');
     if (command === 'kick') {
       let modRole = message.guild.roles.find("name", "moddi", "Mod");
       if (!message.member.roles.has(modRole.id)) {
-        message.channel.send(`sorry, you don't have permission to do that.`);
+        return message.channel.send(`sorry, you don't have permission to do that.`);
       }
       if (message.mentions.users.size === 0) {
         return message.channel.send(`don't forget to mention the user you want to kick!`);
@@ -82,14 +82,19 @@ let modRole = message.guild.roles.find('name', 'moddi');
       if(!message.guild.member(client.user).hasPermission('KICK_MEMBERS')) {
         return message.channel.send(`i don't have the permission to do that. go into server settings > roles > reBot and give me the "Kick Members" permission. then, drag me over the user you'd like to kick. c:`)
       }
-      kickMember.kick();
+      if (!kickMember.kickable) {
+          return message.channel.send(`the user has a role that's higher than my highest role!`)
+      }
+      kickMember.kick()
+        .then(() => message.channel.send(`user successfully kicked!`))
+        .catch(e => message.channel.send(`An error occured!\n\n\`\`\`js\n${e.stack}\n\`\`\``);
     }
 
   //Ban members.
     if (command === `ban`) {
       let modRole = message.guild.roles.find("name", "moddi", "Mod");
       if (!message.member.roles.has(modRole.id)) {
-        message.channel.send(`sorry, you don't have permission to do that.`);
+        return message.channel.send(`sorry, you don't have permission to do that.`);
       }
       if (message.mentions.users.size === 0) {
         return message.channel.send(`don't forget to mention the user you want to ban!`);
@@ -101,8 +106,12 @@ let modRole = message.guild.roles.find('name', 'moddi');
       if(!message.guild.member(client.user).hasPermission('BAN_MEMBERS')) {
         return message.channel.send(`i don't have the permission to do that. go into server settings > roles > reBot and give me the "Ban Members" permission. then, drag me over the user you'd like to ban. c:`)
       }
-      banMember.ban();
-    }
+      if (!banMember.kickable) {
+          return message.channel.send(`the user has a role that's higher than my highest role!`)
+      }
+      banMember.ban()
+        .then(() => message.channel.send(`user successfully banned!`))
+        .catch(e => message.channel.send(`An error occured!\n\n\`\`\`js\n${e.stack}\n\`\`\``);    }
 
  //VERY simple roleme, temporary solution!
  let role = message.guild.roles.find("name", "Updates");
